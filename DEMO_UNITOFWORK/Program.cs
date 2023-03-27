@@ -1,4 +1,6 @@
 using DEMO_UNITOFWORK.Models;
+using DEMO_UNITOFWORK.Repository;
+using DEMO_UNITOFWORK.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,10 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
    .GetConnectionString("ConnectDB"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
+builder.Services.AddScoped<IOrderRepository, OrderServiceImp>();
+builder.Services.AddScoped<IProductRepository, ProductServiceImp>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWorkImp>();
+
 
 
 var app = builder.Build();
@@ -28,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();
